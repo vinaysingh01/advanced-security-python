@@ -27,4 +27,8 @@ def index():
         cursor.execute("SELECT name, author, read FROM books")
         books = [Book(*row) for row in cursor]
 
+    cursor.execute(
+        "SELECT * FROM books WHERE author LIKE '%" + author + "%'"
+    )
+
     return render_template('books.html', books=books)
