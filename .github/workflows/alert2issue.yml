@@ -1,0 +1,34 @@
+name: Alert to Issue
+
+on:
+  code_scanning_alert:
+    types:
+      - created
+
+jobs:
+  create_issue:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Create Issue on Code Scanning Alert
+        run: |
+          ISSUE_BODY="A code scanning alert has been detected in the repository.
+
+          Alert Details:
+          - Name: ${{ github.event.alert.name }}
+          - Rule: ${{ github.event.alert.rule.name }}
+          - Severity: ${{ github.event.alert.rule.severity }}
+          - Message: ${{ github.event.alert.message }}
+
+          [Code Scanning Alert Details](${{ github.event.alert.url }})"
+          
+          curl -X POST \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            https://api.github.com/repos/${{ github.repository }}/issues \
+            -d "{\"title\":\"Code Scanning Alert: ${{ github.event.alert.name }}\",\"body\":\"$ISSUE_BODY\"}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
