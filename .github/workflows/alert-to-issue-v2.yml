@@ -11,18 +11,18 @@ jobs:
       - name: Check for Code Scanning Alerts
         id: code_scanning
         run: |
-		  		# Use the GitHub API to check for code scanning alerts
-		  		# Replace 'REPO_OWNER' and 'REPO_NAME' with your repository's owner and name
-		  		alerts=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-		  		"https://api.github.com/repos/REPO_OWNER/REPO_NAME/code-scanning/alerts")
+          # Use the GitHub API to check for code scanning alerts
+          # Replace 'REPO_OWNER' and 'REPO_NAME' with your repository's owner and name
+          alerts=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+          "https://api.github.com/repos/REPO_OWNER/REPO_NAME/code-scanning/alerts")
 
-				  # Check if there are any alerts
-				  if [ -z "$alerts" ]; then
-		  			echo "No code scanning alerts found."
-		   		else
-		   			echo "Code scanning alerts found. Investigate and take action."
-					fi		  
-        	continue-on-error: true
+          # Check if there are any alerts
+          if [ -z "$alerts" ]; then
+            echo "No code scanning alerts found."
+          else
+            echo "Code scanning alerts found. Investigate and take action."
+          fi		  
+          continue-on-error: true
 
       - name: Create Issue for Code Scanning Alert
         if: ${{ steps.code_scanning.outcome == 'failure' }}
