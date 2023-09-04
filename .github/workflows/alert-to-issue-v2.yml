@@ -24,8 +24,7 @@ jobs:
           fi		  
           # continue-on-error: true
           # echo "steps.code_scanning.outcome is: ${{ steps.code_scanning.outcome }}"
-          run: Create Issue for Code Scanning Alert
-
+    
       - name: Create Issue for Code Scanning Alert
         if: ${{ steps.code_scanning.outcome == 'failure' }}
         env:
