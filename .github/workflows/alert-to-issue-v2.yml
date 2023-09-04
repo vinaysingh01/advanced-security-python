@@ -19,6 +19,8 @@ jobs:
           # Check if there are any alerts
           if [ -z "$alerts" ]; then
             echo "No code scanning alerts found."    
+          else
+            echo "Code scanning alerts found. Investigate and take action."
             env:
               GH_TOKEN: ${{ secrets.GH_TOKEN }}
             run: |
@@ -33,8 +35,7 @@ jobs:
                 "title": "Code Scanning Alert",
                 "body": "A code scanning alert was triggered. Please investigate and address the issue."
               }'
-          else
-            echo "Code scanning alerts found. Investigate and take action."
+            echo "done"  
           fi		  
           # continue-on-error: true
     
