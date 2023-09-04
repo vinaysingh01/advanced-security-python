@@ -23,7 +23,7 @@ jobs:
             echo "Code scanning alerts found. Investigate and take action."
           fi		  
           # continue-on-error: true
-          echo ${{ steps.code_scanning.outcome }}
+          echo "${{ steps.code_scanning.outcome }}"
           run: Create Issue for Code Scanning Alert
 
       - name: Create Issue for Code Scanning Alert
