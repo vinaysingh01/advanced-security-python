@@ -1,0 +1,42 @@
+name: Alert to Issue v2
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  code_scanning:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check for Code Scanning Alerts
+        id: code_scanning
+        run: |
+		  # Use the GitHub API to check for code scanning alerts
+		  # Replace 'REPO_OWNER' and 'REPO_NAME' with your repository's owner and name
+		  alerts=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+		  "https://api.github.com/repos/REPO_OWNER/REPO_NAME/code-scanning/alerts")
+
+		  # Check if there are any alerts
+		  if [ -z "$alerts" ]; then
+		  echo "No code scanning alerts found."
+		   else
+		   echo "Code scanning alerts found. Investigate and take action."
+			fi		  
+        continue-on-error: true
+
+      - name: Create Issue for Code Scanning Alert
+        if: ${{ steps.code_scanning.outcome == 'failure' }}
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: |
+          # Use the GitHub API to create an issue
+          # Replace 'REPO_OWNER' and 'REPO_NAME' with your repository's owner and name
+          # Customize the issue title and body as needed
+          curl -X POST \
+            -H "Authorization: token $GH_TOKEN" \
+            -H "Accept: application/vnd.github.v3+json" \
+            https://api.github.com/repos/REPO_OWNER/REPO_NAME/issues \
+            -d '{
+              "title": "Code Scanning Alert",
+              "body": "A code scanning alert was triggered. Please investigate and address the issue."
+            }'
