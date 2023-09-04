@@ -21,21 +21,21 @@ jobs:
             echo "No code scanning alerts found."    
           else
             echo "Code scanning alerts found. Investigate and take action."
-            env:
-              GH_TOKEN: ${{ secrets.GH_TOKEN }}
-            run: |
+            #env:
+            #  GH_TOKEN: ${{ secrets.GH_TOKEN }}
+            #run: |
               # Use the GitHub API to create an issue
               # Replace 'REPO_OWNER' and 'REPO_NAME' with your repository's owner and name
               # Customize the issue title and body as needed
-              curl -X POST \
-                -H "Authorization: token $GH_TOKEN" \
-                -H "Accept: application/vnd.github.v3+json" \
-                https://api.github.com/repos/REPO_OWNER/REPO_NAME/issues \
-                -d '{
-                "title": "Code Scanning Alert",
-                "body": "A code scanning alert was triggered. Please investigate and address the issue."
-              }'
-            echo "done"  
+            #  curl -X POST \
+            #    -H "Authorization: token $GH_TOKEN" \
+            #    -H "Accept: application/vnd.github.v3+json" \
+            #    https://api.github.com/repos/REPO_OWNER/REPO_NAME/issues \
+            #    -d '{
+            #    "title": "Code Scanning Alert",
+            #    "body": "A code scanning alert was triggered. Please investigate and address the issue."
+            #  }'
+            #echo "done"  
           fi		  
           # continue-on-error: true
     
